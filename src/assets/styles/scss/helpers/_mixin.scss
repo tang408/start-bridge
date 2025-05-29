@@ -1,0 +1,389 @@
+/* Scale */
+@function scale($base, $val) {
+	@if $base == $base-w {
+		@return calc((100dvw / #{$base}) * #{$val});
+	}
+
+	@return calc((100dvh / #{$base}) * #{$val});
+}
+@mixin width-scale($width) {
+	max-width: calc(#{$width} * 0.1rem) ;
+	width: auto;
+	min-width: scale($base-w, $width);
+}
+@mixin height-scale($height) {
+	max-height: calc(#{$height} * 0.1rem) ;
+	height: scale($base-h, $height);
+}
+
+/* RWD */
+@mixin media($query: $phone) {
+	@media #{$query} {
+		@content; /*佔位置的符號,編譯後會把內容塞進來*/
+	}
+}
+
+/* Form */
+@mixin input-style {
+    padding: 8px 20px;
+    border: 2px solid var(--input-bg);
+    border-radius: 5px;
+    background-color: var(--input-bg);
+
+    font-size: 18px;
+    @include font(500);
+    line-height: 30px;
+    color: var(--black);
+
+    @include media($tablet-landscape) {
+        font-size: 16px;
+    }
+
+    &::placeholder {
+        @include font(500);
+        color: rgba($black, 0.25);
+        opacity: 1; /* Firefox */
+    }
+    &::-ms-input-placeholder { /* Edge 12 -18 */
+        @include font(500);
+        color: rgba($black, 0.25);
+    }
+    
+    &[disabled],
+    &[disabled]:hover {
+        @include input-disabled-style();
+    }
+}
+@mixin input-hover-style {
+    border-color: var(--title);
+    border-inline-end-width: initial;
+    background-color: transparent;
+    box-shadow: none;
+}
+@mixin input-disabled-style {
+    border-color: var(--input-bg);
+    border-inline-end-width: initial;
+    background: var(--input-bg);
+    opacity: .5;
+}
+@mixin input-success-style {
+    border-color: var(--success);
+    background-color: rgba($success, .1);
+}
+@mixin input-error-style {
+    border-color: var(--error);
+    border-inline-end-width: initial;
+    background-color: rgba($error, .1);
+}
+
+/* Button Style */
+@mixin btn-style {
+    display: inline-flex;
+    align-items: center;
+
+	@include width-scale(300);
+	@include height-scale(70);
+    padding: scale($base-h, 20) scale($base-h, 35);
+    border-radius: scale($base-h, 35);
+
+    // @include font(300);
+    font-size: 24px;
+	font-weight: 400;
+    line-height: 1.2em;
+
+    @include media($tablet-landscape) {
+        height: 30px;
+        padding: 4px 24px;
+        
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    > span {
+        flex: 1;
+        color: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+    
+        + .svg-icon {
+            margin-left: 4px;
+        }
+    }
+
+    &:not(:disabled):focus,
+    &:not(:disabled):focus-visible {
+        outline: 0;
+        outline-offset: 0;
+    }
+    &:not(:disabled):active {
+        outline: 0;
+        outline-offset: 0;
+    }
+    &[disabled],
+    &.ant-btn-primary:disabled {
+        opacity: .5;
+    }
+}
+@mixin btn-primary-style {
+	
+	background-color: var(--primary);
+    border-radius: scale($base-h, 15);
+	box-shadow: none;
+	color: var(--white);
+
+	.svg-icon {
+		background-color: var(--white);
+	}
+
+	&:not(:disabled):hover {
+		background-color: var(--primary);
+		opacity: .8;
+	}
+	&:not(:disabled):focus,
+	&:not(:disabled):focus-visible {
+		background-color: var(--primary);
+	}
+	&:not(:disabled):active {
+		background-color: var(--primary);
+	}
+	&[disabled],
+	&.ant-btn-primary:disabled {
+		background-color: var(--gray-05);
+		color: var(--white);
+	}
+}
+@mixin btn-secondary-style {
+	
+	background-color: var(--gray-01);
+	box-shadow: none;
+	color: var(--white);
+
+	.svg-icon {
+		background-color: var(--white);
+	}
+
+	&:not(:disabled):hover {
+		background-color: var(--gray-01);
+		color: var(--white);
+		opacity: .8;
+	}
+	&:not(:disabled):focus,
+	&:not(:disabled):focus-visible {
+		background-color: var(--gray-01);
+		color: var(--white);
+	}
+	&:not(:disabled):active {
+		background-color: var(--gray-01);
+		color: var(--white);
+	}
+	&[disabled],
+	&.ant-btn-primary:disabled {
+		background-color: var(--gray-01);
+		color: var(--white);
+	}
+}
+
+/* Space */
+@mixin margin($pos, $size, $rwd: $size) {
+	@if $pos == 'all' {
+		margin: $size;
+
+		@include media($phone) {
+			margin: $rwd;
+		}
+	}
+	@else {
+		margin-#{$pos}: $size;
+
+		@include media($phone) {
+			margin-#{$pos}: $rwd;
+		}
+	}
+}
+@mixin margin-class {
+	@for $i from 0 to 6 {
+		.m-#{$i} {
+			@include margin('all', $i * 10px);
+		}
+		.mt-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+            @else {
+                $rwd: $i * 10px
+            }
+
+			@include margin('top', $i * 10px, $rwd);
+		}
+		.mb-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include margin('bottom', $i * 10px, $rwd);
+		}
+		.my-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include margin('top', $i * 10px, $rwd);
+			@include margin('bottom', $i * 10px, $rwd);
+		}
+
+		.ml-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include margin('left', $i * 10px, $rwd);
+		}
+		.mr-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include margin('right', $i * 10px, $rwd);
+		}
+		.mx-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include margin('left', $i * 10px, $rwd);
+			@include margin('right', $i * 10px, $rwd);
+		}
+	}
+}
+@mixin padding($pos, $size, $rwd: $size) {
+	@if $pos == 'all' {
+		padding: $size;
+
+		@include media($phone) {
+			padding: $rwd;
+		}
+	}
+	@else {
+		padding-#{$pos}: $size;
+
+		@include media($phone) {
+			padding-#{$pos}: $rwd;
+		}
+	}
+}
+@mixin padding-class {
+	@for $i from 0 to 6 {
+		.p-#{$i} {
+			@include padding('all', $i * 10px);
+		}
+		.pt-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include padding('top', $i * 10px, $rwd);
+		}
+		.pb-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include padding('bottom', $i * 10px, $rwd);
+		}
+		.py-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include padding('top', $i * 10px, $rwd);
+			@include padding('bottom', $i * 10px, $rwd);
+		}
+
+		.pl-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include padding('left', $i * 10px, $rwd);
+		}
+		.pr-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include padding('right', $i * 10px, $rwd);
+		}
+		.px-#{$i} {
+			$rwd: $i * 10px;
+			@if $i == 5 {
+				$rwd: 30px
+			}
+			@else if $i == 4 {
+				$rwd: 20px
+			}
+
+			@include padding('left', $i * 10px, $rwd);
+			@include padding('right', $i * 10px, $rwd);
+		}
+	}
+}
+
+/* Horizontal Scroll */
+@mixin horizontalScroll {
+	display: flex;
+	flex-wrap: nowrap;
+	width: 100%;
+	overflow-x: auto;
+
+	/* Hide scrollbar for Chrome, Safari and Opera */
+	&::-webkit-scrollbar {
+		display: none;
+	}
+	-ms-overflow-style: none;  /* IE and Edge */
+	scrollbar-width: none;  /* Firefox */
+}
