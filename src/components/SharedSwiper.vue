@@ -1,0 +1,203 @@
+<template>
+  <div class="progress-section-swiper">
+    <swiper
+      :slides-per-view="3"
+      :space-between="20"
+      :navigation="{
+        nextEl: '.' + nextElClass,
+        prevEl: '.' + prevElClass,
+      }"
+      class="progress-section-swiper-content"
+    >
+      <swiper-slide v-for="card in cards" :key="card.id">
+        <div class="progress-section-card">
+          <img :src="card.img" class="progress-section-card-image w-100" />
+          <div class="p-2 progress-section-card-content">
+            <div class="progress-section-card-title">
+              {{ card.title }}
+            </div>
+            <div class="progress-section-card-progress-bar">
+              <div
+                class="progress-section-card-progress-bar-inner"
+                :style="{ width: card.progress + '%' }"
+              ></div>
+              <span class="progress-percent">{{ card.progress }}%</span>
+            </div>
+            <div class="progress-section-card-info">
+              <span>
+                <img src="@/assets/icon/swiper-icon1.svg" alt="" />
+                {{ card.price }}
+              </span>
+              <span>
+                <img src="@/assets/icon/swiper-icon2.svg" alt="" />
+                {{ card.supporters }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper>
+    <div :class="prevElClass">‹</div>
+    <div :class="nextElClass">›</div>
+  </div>
+</template>
+
+<script setup>
+import { Swiper, SwiperSlide } from "swiper/vue";
+import SwiperCore from "swiper";
+import { Navigation } from "swiper/modules";
+SwiperCore.use([Navigation]);
+
+defineProps({
+  cards: Array,
+  prevElClass: String,
+  nextElClass: String,
+});
+
+import "swiper/swiper-bundle.css";
+</script>
+
+<style lang="scss" scoped>
+.progress-section {
+  &-swiper {
+    position: relative;
+    &-content {
+      width: 1000px;
+    }
+
+    .swiper-slide {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  &-card {
+    background: #fff;
+    border-radius: 30px;
+    padding: 15px;
+    margin: 5px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    height: 429px;
+    text-align: left;
+    display: flex;
+    flex-flow: column;
+    gap: 20px;
+
+    &-image {
+      width: 100%;
+      border-radius: 20px 20px 0px 0px;
+    }
+
+    &-tags {
+      margin: 10px 0;
+
+      &-red {
+        background: #f65332;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+        margin-right: 5px;
+      }
+
+      &-black {
+        background: #333;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+    }
+
+    &-content {
+      display: flex;
+      flex-flow: column;
+      gap: 20px;
+    }
+
+    &-title {
+      font-weight: 600;
+      font-size: 18px;
+      line-height: 24px;
+      letter-spacing: 1px;
+
+      color: #373838;
+    }
+
+    &-progress-bar {
+      position: relative;
+      overflow: hidden;
+
+      height: 30px;
+
+      background: linear-gradient(
+        90deg,
+        #ffcc66 0%,
+        #ff5f31 86.53%,
+        rgba(255, 255, 255, 0) 86.54%
+      );
+      border: 1px solid #d9d9d9;
+      border-radius: 20px;
+
+      .progress-percent {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 12px;
+        font-weight: bold;
+        color: #fff;
+        z-index: 1;
+        pointer-events: none;
+      }
+    }
+
+    &-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+  }
+}
+
+.progress {
+  &-prev,
+  &-next {
+    &-1,
+    &-2 {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: #ff6634;
+      color: white;
+      width: 50px;
+      height: 50px;
+      font-size: 50px;
+      line-height: 40px;
+      text-align: center;
+      align-items: center;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.21);
+
+      &:hover {
+        background: #fa551e;
+      }
+    }
+  }
+  &-prev {
+    &-1,
+    &-2 {
+      left: 30px;
+    }
+  }
+  &-next {
+    &-1,
+    &-2 {
+      right: 30px;
+    }
+  }
+}
+</style>
