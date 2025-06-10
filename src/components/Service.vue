@@ -1,84 +1,143 @@
 <template>
   <div class="service">
+    <div class="service-btn">
+      <button class="service-btn-yellow">
+        <img src="@/assets/icon/btn-icon.svg" />【啟動】創業
+      </button>
+      <button class="service-btn-black">
+        <img src="@/assets/icon/btn-icon2.svg" />【參與】共創
+      </button>
+    </div>
     <div class="container pb-05">
-      <div class="d-flex justify-content-center service-btn">
-        <button class="service-btn-yellow">
-          <img src="@/assets/icon/btn-icon.svg" />【啟動】創業
-        </button>
-        <button class="service-btn-black">
-          <img src="@/assets/icon/btn-icon2.svg" />【參與】共創
-        </button>
-      </div>
       <div class="service-title">
         <h1>全方位創業媒合服務</h1>
         <span>星橋為您繫起，步步實踐成功的橋樑</span>
       </div>
       <div class="service-card">
-        <img src="@/assets/images/service-card.png" class="w-100" />
+        <img src="@/assets/images/service-card.png" class="w-100 mobile-none" />
+        <img
+          src="@/assets/images/service-card-mobile.png"
+          class="w-100 desktop-none"
+        />
       </div>
       <div>
         <ServiceIcon :icons="serviceIcons" />
       </div>
     </div>
-    <div class="service-progress">
-      <img src="@/assets/images/shape1.svg" class="service-progress-shape1" />
-      <img src="@/assets/images/shape2.svg" class="service-progress-shape2" />
-      <div class="container">
-        <SharedSwiper
-          :cards="progressCards"
-          prevElClass="progress-prev-1"
-          nextElClass="progress-next-1"
-        />
-      </div>
+  </div>
+  <div class="service-progress">
+    <img
+      src="@/assets/images/shape1.svg"
+      class="service-progress-shape1 mobile-none"
+    />
+    <img
+      src="@/assets/images/shape1-mobile.svg"
+      class="service-progress-shape1 desktop-none"
+    />
+    <img
+      src="@/assets/images/shape2.svg"
+      class="service-progress-shape2 mobile-none"
+    />
+    <div class="container">
+      <SharedSwiper
+        :cards="progressCards"
+        prevElClass="progress-prev-1"
+        nextElClass="progress-next-1"
+      />
     </div>
-    <div class="service-project">
-      <div class="container">
-        <SharedSwiper
-          :cards="progressCards"
-          prevElClass="progress-prev-2"
-          nextElClass="progress-next-2"
-        />
-        <button class="service-project-btn mt-5" @click="goMoreProjects">
-          更多專案
-        </button>
-      </div>
+  </div>
+  <div class="service-project">
+    <div class="container">
+      <SharedSwiper
+        :cards="progressCards"
+        prevElClass="progress-prev-2"
+        nextElClass="progress-next-2"
+      />
+      <button class="service-project-btn mt-5" @click="goMoreProjects">
+        更多專案
+      </button>
     </div>
-
-    <div class="service-process">
-      <div class="container">
-        <div class="service-title">
-          <h1>服務流程</h1>
-          <span>星橋撐腰，雙向安心，輕鬆啟程</span>
+  </div>
+  <div class="service-process">
+    <div class="container">
+      <div class="service-title">
+        <h1>服務流程</h1>
+        <span>星橋撐腰，雙向安心，輕鬆啟程</span>
+      </div>
+      <div class="process-flow">
+        <div class="process-cards">
+          <div
+            class="process-card"
+            v-for="(step, index) in processCardSteps"
+            :key="index"
+          >
+            <img :src="step.img" class="process-image" />
+            <div class="btn-tooltip-wrapper">
+              <div class="process-btn">{{ step.title }}</div>
+              <div class="process-tooltip">{{ step.desc }}</div>
+            </div>
+          </div>
         </div>
-        <div class="process-flow">
-          <div class="process-cards">
+
+        <div class="process-step">
+          <div class="process-step-tracker">
             <div
-              class="process-card"
-              v-for="(step, index) in processCardSteps"
-              :key="index"
+              class="step"
+              v-for="(step, index) in processSteps"
+              :key="'step-' + index"
+              :class="{ active: index === 0 }"
             >
-              <img :src="step.img" class="process-image" />
-              <div class="btn-tooltip-wrapper">
-                <div class="process-btn">{{ step.title }}</div>
-                <div class="process-tooltip">{{ step.desc }}</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="process-step">
-            <div class="process-step-tracker">
-              <div
-                class="step"
-                v-for="(step, index) in processSteps"
-                :key="'step-' + index"
-                :class="{ active: index === 0 }"
-              >
-                {{ index + 1 }}
-              </div>
+              {{ index + 1 }}
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="service-partners">
+    <div class="container">
+      <div class="service-title">
+        <h1>合作夥伴</h1>
+      </div>
+      <div class="service-partners-content row mt-4">
+        <div class="service-partners-content-one">
+          <div class="col-12 col-md-6">
+            <img src="@/assets/images/LOGO2.png" class="w-100" />
+          </div>
+          <div class="col-12 col-md-6">
+            <img src="@/assets/images/LOGO1.png" class="w-100" />
+          </div>
+        </div>
+        <div class="service-partners-content-two mobile-none">
+          <div class="col-6">
+            <img src="@/assets/images/LOGO1.png" class="w-100" />
+          </div>
+          <div class="col-6">
+            <img src="@/assets/images/LOGO2.png" class="w-100" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="service-item">
+    <img
+      src="@/assets/images/service-item-banner.jpg"
+      class="mobile-none service-item-img"
+    />
+    <img
+      src="@/assets/images/service-item-banner-mobile.jpg"
+      class="desktop-none service-item-img"
+    />
+    <div class="service-item-card">
+      <span>
+        期望以崇本務實的精神，在服務平台這樣的領域，以「負責、正直、誠懇與珍惜」的態度，成為創業者與投資人之間最可靠的橋樑。
+      </span>
+      <button>
+        <img src="@/assets/icon/btn-icon2.svg" />
+        啟動「創業項目」
+      </button>
     </div>
   </div>
 </template>
@@ -195,10 +254,17 @@ const processSteps = [1, 2, 3, 4];
   background-repeat: no-repeat;
   padding: 2rem 0;
   text-align: center;
-
+  @media (max-width: 767px) {
+    padding: 0;
+  }
   &-btn {
     gap: 1rem;
     margin-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+    @media (max-width: 767px) {
+      display: block;
+    }
     button {
       font-weight: 500;
       font-size: 22px;
@@ -213,6 +279,11 @@ const processSteps = [1, 2, 3, 4];
       border: none;
       width: 400px;
       justify-content: center;
+      @media (max-width: 767px) {
+        width: 100%;
+        border-radius: 0;
+        font-size: 18px;
+      }
     }
     &-yellow {
       color: #000000;
@@ -231,13 +302,17 @@ const processSteps = [1, 2, 3, 4];
   }
 
   &-title {
-    // margin-top: 3rem;
     letter-spacing: 0.1em;
+    @media (max-width: 767px) {
+      text-align: center;
+    }
     h1 {
       font-weight: 700;
       font-size: 36px;
       line-height: 43px;
-      letter-spacing: 0.1em;
+      @media (max-width: 767px) {
+        font-size: 28px;
+      }
     }
     span {
       font-weight: 400;
@@ -248,15 +323,28 @@ const processSteps = [1, 2, 3, 4];
 
   &-card {
     margin-top: 3rem;
+    @media (max-width: 767px) {
+      margin-top: 1rem;
+    }
   }
 
   &-progress {
     background-color: #ffcc66;
     position: relative;
+    padding: 4rem 0;
+    @media (max-width: 767px) {
+      padding: 6rem 0;
+    }
     &-shape1 {
       position: absolute;
       left: 0;
       top: -170px;
+      @media (max-width: 767px) {
+        position: absolute;
+        left: 50%;
+        top: -140px;
+        translate: -50%;
+      }
     }
     &-shape2 {
       position: absolute;
@@ -266,15 +354,12 @@ const processSteps = [1, 2, 3, 4];
   }
 }
 
-.service-progress {
-  padding: 4rem 0;
-}
-
 .service-project {
   padding: 4rem 0;
   background-image: url("@/assets/images/service-project.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  text-align: center;
   &-btn {
     padding: 10px 24px;
     font-size: 16px;
@@ -288,6 +373,9 @@ const processSteps = [1, 2, 3, 4];
     border: none;
 
     width: 35%;
+    @media (max-width: 767px) {
+      width: 251px;
+    }
     &:hover {
       background: #000000;
     }
@@ -343,7 +431,7 @@ const processSteps = [1, 2, 3, 4];
 
       .process-tooltip {
         margin-top: -1rem;
-        padding: 25px 20px;
+        padding: 25px 15px;
         width: 250px;
         border-radius: 8px;
         position: relative;
@@ -390,7 +478,7 @@ const processSteps = [1, 2, 3, 4];
         left: 0;
         right: 0;
         height: 2px;
-        background-color: #ccc;
+        background-color: #46494a;
         transform: translateY(-50%);
         z-index: 0;
       }
@@ -401,21 +489,99 @@ const processSteps = [1, 2, 3, 4];
         width: 26px;
         height: 26px;
         border-radius: 50%;
-        border: 2px solid #999;
-        background-color: #fff;
-        color: #333;
+        border: 2px solid #46494a;
+        color: #46494a;
         display: flex;
         justify-content: center;
         align-items: center;
         font-weight: bold;
         font-size: 14px;
-        background: #fff;
+        background: #e7e7e7;
       }
 
       .step.active {
-        background-color: #333;
+        background-color: #46494a;
         color: #fff;
-        border-color: #333;
+        border-color: #46494a;
+      }
+    }
+  }
+}
+
+.service-partners {
+  padding: 4rem 0;
+  &-content {
+    .service-partners-content {
+      &-one,
+      &-two {
+        display: flex;
+        @media (max-width: 767px) {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.service-item {
+  // background: url("@/assets/images/service-item-banner.jpg");
+  // background-repeat: no-repeat;
+  // background-size: 100%;
+  // height: 600px;
+  // background-position: center;
+  position: relative;
+  @media (max-width: 767px) {
+    // background: url("@/assets/images/service-item-banner-mobile.jpg");
+    // background-repeat: no-repeat;
+    // height: 368px;
+    // background-size: cover;
+  }
+
+  &-img {
+    height: 600px;
+    width: 100%;
+    object-fit: cover;
+    @media (max-width: 767px) {
+      height: 368px;
+    }
+  }
+
+  &-card {
+    width: 430px;
+    position: absolute;
+    bottom: 120px;
+    right: 280px;
+    display: inline-flex;
+    flex-flow: column;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 30px;
+    padding: 40px;
+    gap: 25px;
+
+    @media (max-width: 767px) {
+      position: revert;
+    }
+
+    span {
+      color: #373a36;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 28px;
+      text-align: start;
+    }
+    button {
+      padding: 10px 20px;
+      background: #262626;
+      border-radius: 50px;
+      color: #fff;
+      width: 250px;
+      gap: 8px;
+      display: flex;
+      justify-content: center;
+      border: none;
+
+      @media (max-width: 767px) {
+        width: 100%;
       }
     }
   }

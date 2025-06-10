@@ -66,7 +66,24 @@ const navItems = [
   padding: 10px 40px;
   border-radius: 50px;
   height: 70px;
+
+  @media (max-width: 767px) {
+    padding: 10px 25px;
+    position: relative;
+  }
   &-nav {
+    @media (max-width: 767px) {
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 113, 74, 1),
+        rgba(255, 95, 49, 1)
+      );
+    }
     li {
       .nav-link {
         font-weight: 600;
@@ -75,7 +92,24 @@ const navItems = [
         line-height: 19px;
         letter-spacing: 2px;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        @media (max-width: 767px) {
+          padding: 10px 0;
+          width: 100%;
+        }
       }
+    }
+  }
+
+  &-collapse {
+    @media (max-width: 767px) {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(to bottom, #ff714a, #ff5f31);
+      padding: 1rem;
+      z-index: 98;
+      border-radius: 12px;
     }
   }
 }

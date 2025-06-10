@@ -181,7 +181,11 @@ import "swiper/swiper-bundle.css";
       border-radius: 50%;
       cursor: pointer;
       box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.21);
-
+      @media (max-width: 767px) {
+        transform: translateY(0%);
+        top: revert;
+        bottom: -60px;
+      }
       &:hover {
         background: #fa551e;
       }
@@ -197,6 +201,13 @@ import "swiper/swiper-bundle.css";
     &-1,
     &-2 {
       right: 30px;
+    }
+  }
+
+  &-prev-2,
+  &-next-2 {
+    @media (max-width: 767px) {
+      display: none;
     }
   }
 }
