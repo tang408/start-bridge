@@ -302,10 +302,8 @@ const processSteps = [1, 2, 3, 4];
   }
 
   &-title {
+    text-align: center;
     letter-spacing: 0.1em;
-    @media (max-width: 767px) {
-      text-align: center;
-    }
     h1 {
       font-weight: 700;
       font-size: 36px;
