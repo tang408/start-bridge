@@ -12,6 +12,14 @@ const routes = [
         name: "Home",
         component: Home,
       },
+      {
+        path: "合作刊登",
+        component: Home,
+        children: [
+          { path: "品牌刊登", component: Home },
+          { path: "成功案例", component: Home },
+        ],
+      },
     ],
   },
 ];

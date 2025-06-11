@@ -36,7 +36,7 @@ section {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  font-family: "Noto Sans TC";
   vertical-align: baseline;
 }
 
@@ -95,5 +95,12 @@ body {
   display: none !important;
   @media (max-width: 767px) {
     display: block !important;
+  }
+}
+
+.desktop-flex-none {
+  display: none !important;
+  @media (max-width: 767px) {
+    display: flex !important;
   }
 }

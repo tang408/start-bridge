@@ -19,11 +19,24 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
-            <li class="nav-item" v-for="(item, index) in navItems" :key="index">
+            <li
+              class="nav-item"
+              :class="{ 'has-children': item.children }"
+              v-for="(item, index) in navItems"
+              :key="index"
+            >
               <router-link class="nav-link" :to="item.link">
                 <img src="@/assets/icon/menu-icon.svg" />
                 {{ item.label }}
               </router-link>
+              <!-- 子層 dropdown -->
+              <ul v-if="item.children" class="dropdown-menu">
+                <li v-for="(child, cIdx) in item.children" :key="cIdx">
+                  <router-link class="dropdown-item" :to="child.link">
+                    {{ child.label }}
+                  </router-link>
+                </li>
+              </ul>
             </li>
             <li class="nav-item bc-1 br-1 logIn">
               <router-link class="nav-link">
@@ -42,10 +55,18 @@
 import logoUrl from "@/assets/images/logo.png";
 const navItems = [
   { label: "首頁", link: "/" },
-  { label: "合作刊登", link: "/" },
+  {
+    label: "合作刊登",
+    link: "/",
+    children: [{ label: "品牌刊登", link: "/" }],
+  },
   { label: "專案一覽", link: "/" },
   { label: "啟動/參與", link: "/" },
-  { label: "創媒之星", link: "/" },
+  {
+    label: "創媒之星",
+    link: "/",
+    children: [{ label: "成功案例", link: "/" }],
+  },
   { label: "門市分布", link: "/" },
 ];
 </script>
@@ -110,6 +131,39 @@ const navItems = [
       padding: 1rem;
       z-index: 98;
       border-radius: 12px;
+    }
+  }
+}
+
+.navbar-nav {
+  .nav-item {
+    position: relative;
+
+    &.has-children:hover .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #ff714a;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 999;
+      padding: 0.5rem 0;
+      min-width: 160px;
+
+      .dropdown-item {
+        padding: 8px 16px;
+        font-size: 14px;
+        color: white;
+        white-space: nowrap;
+        &:hover {
+          background-color: #ff5f31;
+        }
+      }
     }
   }
 }

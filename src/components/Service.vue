@@ -38,7 +38,7 @@
       src="@/assets/images/shape2.svg"
       class="service-progress-shape2 mobile-none"
     />
-    <div class="container">
+    <div class="container p-0">
       <SharedSwiper
         :cards="progressCards"
         prevElClass="progress-prev-1"
@@ -47,7 +47,7 @@
     </div>
   </div>
   <div class="service-project">
-    <div class="container">
+    <div class="container p-0">
       <SharedSwiper
         :cards="progressCards"
         prevElClass="progress-prev-2"
@@ -64,12 +64,29 @@
         <h1>服務流程</h1>
         <span>星橋撐腰，雙向安心，輕鬆啟程</span>
       </div>
-      <div class="process-flow">
-        <div class="process-cards">
+      <div class="process">
+        <div class="process-step">
+          <!-- Step Tracker (共用 for desktop + mobile) -->
+          <div class="process-step-tracker">
+            <div
+              class="process-step-tracker-item"
+              v-for="(step, index) in processSteps"
+              :key="index"
+              :class="{ active: index === activeIndex }"
+              @click="setActive(index)"
+            >
+              {{ index + 1 }}
+            </div>
+          </div>
+        </div>
+
+        <!-- 桌機卡片 (全部顯示但根據 activeIndex 改變樣式或加高亮) -->
+        <div class="process-cards desktop-block mobile-none">
           <div
-            class="process-card"
+            class="process-cards-item"
             v-for="(step, index) in processCardSteps"
             :key="index"
+            :class="{ active: index === activeIndex }"
           >
             <img :src="step.img" class="process-image" />
             <div class="btn-tooltip-wrapper">
@@ -79,15 +96,20 @@
           </div>
         </div>
 
-        <div class="process-step">
-          <div class="process-step-tracker">
-            <div
-              class="step"
-              v-for="(step, index) in processSteps"
-              :key="'step-' + index"
-              :class="{ active: index === 0 }"
-            >
-              {{ index + 1 }}
+        <!-- 手機卡片（只顯示當前步驟） -->
+        <div class="mobile-block desktop-none">
+          <div class="mobile-step">
+            <img
+              :src="processCardSteps[activeIndex].img"
+              class="mobile-image w-100"
+            />
+            <div class="btn-tooltip-wrapper">
+              <div class="process-btn">
+                {{ processCardSteps[activeIndex].title }}
+              </div>
+              <div class="process-tooltip">
+                {{ processCardSteps[activeIndex].desc }}
+              </div>
             </div>
           </div>
         </div>
@@ -145,6 +167,9 @@
 <script setup>
 import ServiceIcon from "../components/Service-Icon.vue";
 import SharedSwiper from "./SharedSwiper.vue";
+import { ref } from "vue";
+
+const activeIndex = ref(0);
 
 const serviceIcons = [
   {
@@ -246,6 +271,10 @@ const processCardSteps = [
 ];
 
 const processSteps = [1, 2, 3, 4];
+
+function setActive(index) {
+  activeIndex.value = index;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -369,10 +398,10 @@ const processSteps = [1, 2, 3, 4];
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     border-radius: 50px;
     border: none;
-
     width: 35%;
     @media (max-width: 767px) {
       width: 251px;
+      margin-top: 2rem !important;
     }
     &:hover {
       background: #000000;
@@ -394,7 +423,7 @@ const processSteps = [1, 2, 3, 4];
     gap: 2rem;
     margin-top: 3rem;
 
-    .process-card {
+    .process-cards-item {
       width: 22%;
       text-align: center;
       position: relative;
@@ -406,60 +435,16 @@ const processSteps = [1, 2, 3, 4];
         width: 320px;
         height: 320px;
       }
-
-      .btn-tooltip-wrapper {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .process-btn {
-        background-color: #333;
-        color: #fff;
-        padding: 10px 20px;
-        border-radius: 50px;
-        font-weight: bold;
-        cursor: pointer;
-        display: inline-block;
-        width: 200px;
-        font-size: 24px;
-        z-index: 1;
-      }
-
-      .process-tooltip {
-        margin-top: -1rem;
-        padding: 25px 15px;
-        width: 250px;
-        border-radius: 8px;
-        position: relative;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease;
-        min-height: 60px;
-        border: 2px solid;
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 19px;
-        text-align: center;
-        letter-spacing: 0.1em;
-        color: #000000;
-      }
-
-      .btn-tooltip-wrapper:hover .process-tooltip {
-        opacity: 1;
-        visibility: visible;
-
-        &::after {
-          opacity: 1;
-        }
-      }
     }
   }
   .process-step {
     width: 100%;
     display: flex;
     justify-content: center;
+    order: 2;
+    @media (max-width: 767px) {
+      order: 1;
+    }
     &-tracker {
       display: flex;
       justify-content: space-between;
@@ -467,7 +452,11 @@ const processSteps = [1, 2, 3, 4];
       position: relative;
       margin-top: 2rem;
       padding: 0;
-      width: 1050px;
+      // width: 1049px;
+      width: 80%;
+      @media (max-width: 767px) {
+        width: 45%;
+      }
 
       &::before {
         content: "";
@@ -481,7 +470,7 @@ const processSteps = [1, 2, 3, 4];
         z-index: 0;
       }
 
-      .step {
+      &-item {
         position: relative;
         z-index: 1;
         width: 26px;
@@ -495,12 +484,19 @@ const processSteps = [1, 2, 3, 4];
         font-weight: bold;
         font-size: 14px;
         background: #e7e7e7;
+        cursor: pointer;
+        transition: background 0.3s, color 0.3s;
       }
 
-      .step.active {
+      &-item.active {
         background-color: #46494a;
         color: #fff;
         border-color: #46494a;
+      }
+
+      &-tracker {
+        &-item {
+        }
       }
     }
   }
@@ -558,6 +554,8 @@ const processSteps = [1, 2, 3, 4];
 
     @media (max-width: 767px) {
       position: revert;
+      width: 100%;
+      padding: 40px 27px;
     }
 
     span {
@@ -566,6 +564,9 @@ const processSteps = [1, 2, 3, 4];
       font-size: 16px;
       line-height: 28px;
       text-align: start;
+      @media (max-width: 767px) {
+        text-align: center;
+      }
     }
     button {
       padding: 10px 20px;
@@ -582,6 +583,70 @@ const processSteps = [1, 2, 3, 4];
         width: 100%;
       }
     }
+  }
+}
+
+.btn-tooltip-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &:hover .process-tooltip {
+    opacity: 1;
+    visibility: visible;
+
+    &::after {
+      opacity: 1;
+    }
+  }
+  &:active .process-tooltip {
+    @media (max-width: 767px) {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &::after {
+      @media (max-width: 767px) {
+        opacity: 1;
+      }
+    }
+  }
+}
+.process {
+  &-btn {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+    width: 200px;
+    font-size: 24px;
+    z-index: 1;
+    text-align: center;
+    @media (max-width: 767px) {
+      font-size: 20px;
+      padding: 7px 20px;
+    }
+  }
+  &-tooltip {
+    margin-top: -1rem;
+    padding: 25px 15px;
+    width: 250px;
+    border-radius: 8px;
+    position: relative;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    min-height: 60px;
+    border: 2px solid;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    letter-spacing: 0.1em;
+    color: #000000;
   }
 }
 </style>

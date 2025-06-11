@@ -1,8 +1,14 @@
 <template>
   <div class="progress-section-swiper">
     <swiper
-      :slides-per-view="3"
-      :space-between="20"
+      :slides-per-view="slidesPerView"
+      :centered-slides="centeredSlides"
+      :space-between="spaceBetween"
+      :initial-slide="1"
+      :watch-slides-visibility="true"
+      :loop-additional-slides="2"
+      :loop="loop"
+      :looped-slides="cards.length"
       :navigation="{
         nextEl: '.' + nextElClass,
         prevEl: '.' + prevElClass,
@@ -46,12 +52,32 @@
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
+import { ref, onMounted } from "vue";
 SwiperCore.use([Navigation]);
 
 defineProps({
   cards: Array,
   prevElClass: String,
   nextElClass: String,
+});
+
+const slidesPerView = ref(3);
+const spaceBetween = ref(20);
+const centeredSlides = ref(false);
+const loop = ref(false);
+
+onMounted(() => {
+  if (window.innerWidth <= 767) {
+    slidesPerView.value = 1.25;
+    centeredSlides.value = true;
+    spaceBetween.value = 0;
+    loop.value = true;
+  } else {
+    slidesPerView.value = 3;
+    centeredSlides.value = false;
+    spaceBetween.value = 20;
+    loop.value = false;
+  }
 });
 
 import "swiper/swiper-bundle.css";
@@ -63,11 +89,18 @@ import "swiper/swiper-bundle.css";
     position: relative;
     &-content {
       width: 1000px;
+      @media (max-width: 767px) {
+        width: 100%;
+        padding: 8px 16px;
+        box-sizing: border-box;
+      }
     }
 
     .swiper-slide {
       display: flex;
-      justify-content: center;
+      @media (min-width: 768px) {
+        justify-content: center;
+      }
     }
   }
 
@@ -83,6 +116,13 @@ import "swiper/swiper-bundle.css";
     display: flex;
     flex-flow: column;
     gap: 20px;
+
+    @media (max-width: 767px) {
+      width: 90%;
+      height: 100%;
+      margin: auto;
+      gap: 5px;
+    }
 
     &-image {
       width: 100%;
@@ -114,6 +154,9 @@ import "swiper/swiper-bundle.css";
       display: flex;
       flex-flow: column;
       gap: 20px;
+      @media (max-width: 767px) {
+        gap: 5px;
+      }
     }
 
     &-title {
@@ -121,16 +164,17 @@ import "swiper/swiper-bundle.css";
       font-size: 18px;
       line-height: 24px;
       letter-spacing: 1px;
-
       color: #373838;
+
+      @media (max-width: 767px) {
+        font-size: 15px;
+      }
     }
 
     &-progress-bar {
       position: relative;
       overflow: hidden;
-
       height: 30px;
-
       background: linear-gradient(
         90deg,
         #ffcc66 0%,
@@ -139,7 +183,9 @@ import "swiper/swiper-bundle.css";
       );
       border: 1px solid #d9d9d9;
       border-radius: 20px;
-
+      @media (max-width: 767px) {
+        height: 20px;
+      }
       .progress-percent {
         position: absolute;
         top: 50%;
@@ -156,7 +202,10 @@ import "swiper/swiper-bundle.css";
     &-info {
       display: flex;
       justify-content: space-between;
-      font-size: 12px;
+      font-size: 16px;
+      @media (max-width: 767px) {
+        font-size: 14px;
+      }
     }
   }
 }
