@@ -3,7 +3,7 @@
     <div class="container">
       <nav class="navbar navbar-expand-lg">
         <router-link class="navbar-brand logo" to="/">
-          <img :src="logoUrl" alt="Logo" />
+          <img :src="logoUrl" alt="Logo" height="32" />
         </router-link>
 
         <button
