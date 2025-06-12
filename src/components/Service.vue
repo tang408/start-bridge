@@ -612,6 +612,10 @@ function setActive(index) {
   }
 }
 .process {
+  @media (min-width: 768px) {
+    display: flex;
+    flex-flow: column;
+  }
   &-btn {
     background-color: #333;
     color: #fff;
