@@ -194,6 +194,7 @@ const navItems = [
       @media (min-width: 768px) {
         border-radius: 50px;
         background-color: #373838;
+        border: none;
       }
     }
 
