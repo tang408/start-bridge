@@ -298,6 +298,7 @@ function setActive(index) {
       font-weight: 500;
       font-size: 22px;
       line-height: 26px;
+      height: 70px;
       display: flex;
       align-items: center;
       letter-spacing: 2px;
@@ -311,6 +312,7 @@ function setActive(index) {
       @media (max-width: 767px) {
         width: 85%;
         font-size: 18px;
+        height: 40px;
       }
     }
     &-yellow {
