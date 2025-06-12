@@ -30,6 +30,10 @@ const images = [
 <style lang="scss" scoped>
 .banner {
   margin-top: -94px;
+  @media (max-width: 767px) {
+    margin-top: 0;
+    background-color: #f64c24;
+  }
 
   .banner-swiper {
     width: 100%;

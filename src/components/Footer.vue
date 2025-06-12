@@ -52,7 +52,7 @@ export default {
       flex-flow: column;
       align-items: center;
       text-align: center;
-      gap: 20px;
+      gap: 30px;
     }
     .col-sm-6 {
       display: flex;

@@ -66,7 +66,6 @@
       </div>
       <div class="process">
         <div class="process-step">
-          <!-- Step Tracker (共用 for desktop + mobile) -->
           <div class="process-step-tracker">
             <div
               class="process-step-tracker-item"
@@ -80,7 +79,6 @@
           </div>
         </div>
 
-        <!-- 桌機卡片 (全部顯示但根據 activeIndex 改變樣式或加高亮) -->
         <div class="process-cards desktop-block mobile-none">
           <div
             class="process-cards-item"
@@ -96,7 +94,6 @@
           </div>
         </div>
 
-        <!-- 手機卡片（只顯示當前步驟） -->
         <div class="mobile-block desktop-none">
           <div class="mobile-step">
             <img
@@ -292,7 +289,10 @@ function setActive(index) {
     display: flex;
     justify-content: center;
     @media (max-width: 767px) {
-      display: block;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      padding-top: 2rem;
     }
     button {
       font-weight: 500;
@@ -309,8 +309,7 @@ function setActive(index) {
       width: 400px;
       justify-content: center;
       @media (max-width: 767px) {
-        width: 100%;
-        border-radius: 0;
+        width: 85%;
         font-size: 18px;
       }
     }

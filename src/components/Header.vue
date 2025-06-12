@@ -5,19 +5,16 @@
         <router-link class="navbar-brand logo" to="/">
           <img :src="logoUrl" alt="Logo" />
         </router-link>
+
         <button
           class="navbar-toggler"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          @click.stop="isMenuOpen = !isMenuOpen"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div :class="['navbar-collapse', { open: isMenuOpen }]" id="navbarNav">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
             <li
               class="nav-item"
@@ -25,21 +22,43 @@
               v-for="(item, index) in navItems"
               :key="index"
             >
-              <router-link class="nav-link" :to="item.link">
-                <img src="@/assets/icon/menu-icon.svg" />
-                {{ item.label }}
-              </router-link>
-              <!-- 子層 dropdown -->
-              <ul v-if="item.children" class="dropdown-menu">
+              <div
+                class="nav-link d-flex align-items-center justify-content-between"
+                @click.stop="
+                  item.children ? toggleSubMenu(index) : handleLinkClick()
+                "
+              >
+                <div class="d-flex align-items-center gap-1">
+                  <img src="@/assets/icon/menu-icon.svg" />
+                  {{ item.label }}
+                </div>
+                <span v-if="item.children" class="ms-2 nav-arrow">&#9660;</span>
+              </div>
+
+              <ul
+                v-if="item.children"
+                class="dropdown-menu"
+                :class="{ show: openIndex === index }"
+                @click.stop
+              >
                 <li v-for="(child, cIdx) in item.children" :key="cIdx">
-                  <router-link class="dropdown-item" :to="child.link">
+                  <router-link
+                    class="dropdown-item"
+                    :to="child.link"
+                    @click="handleLinkClick"
+                  >
                     {{ child.label }}
                   </router-link>
                 </li>
               </ul>
             </li>
+
             <li class="nav-item bc-1 br-1 logIn">
-              <router-link class="nav-link">
+              <router-link
+                class="nav-link"
+                to="/login"
+                @click="handleLinkClick"
+              >
                 <img src="@/assets/icon/menu-icon.svg" />
                 登入
               </router-link>
@@ -52,7 +71,40 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import logoUrl from "@/assets/images/logo.png";
+
+const isMenuOpen = ref(false);
+const openIndex = ref(null);
+
+const toggleSubMenu = (index) => {
+  if (window.innerWidth <= 767) {
+    openIndex.value = openIndex.value === index ? null : index;
+  }
+};
+
+const handleLinkClick = () => {
+  if (window.innerWidth <= 767) {
+    isMenuOpen.value = false;
+    openIndex.value = null;
+  }
+};
+
+const closeMenus = () => {
+  if (window.innerWidth <= 767) {
+    isMenuOpen.value = false;
+    openIndex.value = null;
+  }
+};
+
+onMounted(() => {
+  document.body.addEventListener("click", closeMenus);
+});
+
+onBeforeUnmount(() => {
+  document.body.removeEventListener("click", closeMenus);
+});
+
 const navItems = [
   { label: "首頁", link: "/" },
   {
@@ -70,6 +122,7 @@ const navItems = [
   { label: "門市分布", link: "/" },
 ];
 </script>
+
 <style lang="scss" scoped>
 .w-100 {
   z-index: 99;
@@ -78,6 +131,10 @@ const navItems = [
 
 .container {
   padding-top: 1.5rem;
+
+  @media (max-width: 767px) {
+    background: #f64c24;
+  }
 }
 
 .navbar {
@@ -92,77 +149,141 @@ const navItems = [
     padding: 10px 25px;
     position: relative;
   }
-  &-nav {
+
+  .navbar-toggler {
+    border: none;
+    background: none;
+    color: #fff;
+  }
+}
+
+.navbar-collapse {
+  display: none;
+
+  &.open {
+    display: block;
+    background: linear-gradient(to bottom, #ff714aee, #ff5f31ee);
     @media (max-width: 767px) {
-      border-radius: 12px;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      background: linear-gradient(
-        to bottom,
-        rgba(255, 113, 74, 1),
-        rgba(255, 95, 49, 1)
-      );
-    }
-    li {
-      .nav-link {
-        font-weight: 600;
-        font-size: 16px;
-        color: #fff;
-        line-height: 19px;
-        letter-spacing: 2px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        @media (max-width: 767px) {
-          padding: 10px 0;
-          width: 100%;
-        }
-      }
+      border-radius: 5px 5px 15px 15px;
+      margin-top: 1rem;
+      position: absolute;
+      top: 80%;
+      width: 94%;
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 
-  &-collapse {
-    @media (max-width: 767px) {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background: linear-gradient(to bottom, #ff714a, #ff5f31);
-      padding: 1rem;
-      z-index: 98;
-      border-radius: 12px;
-    }
+  @media (min-width: 768px) {
+    display: flex !important;
   }
 }
 
 .navbar-nav {
   .nav-item {
     position: relative;
+    &:hover {
+      border-radius: 10px;
+      padding: 0;
+      @media (min-width: 768px) {
+        border: 2px solid #ffcc66;
+      }
+    }
 
-    &.has-children:hover .dropdown-menu {
-      display: block;
+    &.logIn:hover {
+      @media (min-width: 768px) {
+        border-radius: 50px;
+        background-color: #373838;
+      }
+    }
+
+    .nav-link {
+      font-weight: 600;
+      font-size: 16px;
+      color: #fff;
+      line-height: 19px;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+
+      @media (max-width: 767px) {
+        padding: 10px 20px;
+        width: 100%;
+      }
     }
 
     .dropdown-menu {
       display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background-color: #ff714a;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      z-index: 999;
-      padding: 0.5rem 0;
-      min-width: 160px;
+
+      @media (min-width: 768px) {
+        position: absolute;
+        top: 38px;
+        left: -8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 0;
+        min-width: 120px;
+        border-radius: 20px;
+        background: linear-gradient(
+          95.14deg,
+          rgba(255, 113, 74, 0.8) 36.47%,
+          rgba(255, 95, 49, 0.8) 64.66%
+        );
+        backdrop-filter: blur(2px);
+      }
+
+      @media (max-width: 767px) {
+        position: relative;
+        box-shadow: none;
+      }
 
       .dropdown-item {
-        padding: 8px 16px;
-        font-size: 14px;
-        color: white;
-        white-space: nowrap;
+        width: 120px;
+        height: 38px;
+        border-radius: 20px;
+        text-align: center;
+        align-content: center;
+        padding: 0;
+
+        @media (max-width: 767px) {
+          padding: 8px 12px;
+          text-align: center;
+        }
+        @media (min-width: 768px) {
+          color: #fff;
+        }
         &:hover {
           background-color: #ff5f31;
         }
+      }
+
+      &.show {
+        display: block;
+
+        border: none;
+        border-radius: 0;
+        @media (min-width: 768px) {
+          display: none !important;
+        }
+
+        @media (max-width: 767px) {
+          background: #f17e5d;
+          padding: 0.25rem 10px;
+        }
+        a {
+          @media (max-width: 767px) {
+            color: #fff;
+          }
+        }
+      }
+    }
+    .nav-arrow {
+      @media (min-width: 768px) {
+        display: none;
+      }
+    }
+    @media (min-width: 768px) {
+      &.has-children:hover .dropdown-menu {
+        display: block;
       }
     }
   }
